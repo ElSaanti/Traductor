@@ -15,7 +15,7 @@ from gtts import gTTS
 from googletrans import Translator
 
 
-st.title("TRADUCTOR.")
+st.title("TRADUCTOR Shiny.")
 st.subheader("Escucho lo que quieres traducir.")
 
 
@@ -29,7 +29,7 @@ with st.sidebar:
                  " la configuración de lenguaje que necesites.")
 
 
-st.write("Toca el Botón y habla lo que quires traducir")
+st.write("Toca el Botón y habla lo que te gustaria traducir")
 
 stt_button = Button(label=" Escuchar  🎤", width=300,  height=50)
 
