@@ -57,6 +57,22 @@ stt_button.js_on_event("button_click", CustomJS(code="""
     
     recognition.start();
 """))
+)
+
+stop_btn = Button(label="⏹️ Detener", width=300, height=44)
+stop_btn.js_on_event(
+    "button_click",
+    CustomJS(
+        code="""
+try {
+  if (window._rec) { window._rec.stop(); }
+  document.dispatchEvent(new CustomEvent("GET_TEXT", {detail: ""}));
+} catch (err) {
+  document.dispatchEvent(new CustomEvent("GET_TEXT", {detail: "[ERROR] " + err}));
+}
+"""
+    ),
+)
 
 result = streamlit_bokeh_events(
     stt_button,
