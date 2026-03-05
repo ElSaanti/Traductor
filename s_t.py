@@ -9,50 +9,8 @@ import glob
 from gtts import gTTS
 from googletrans import Translator
 
-# --- CONFIGURACIÓN DE PÁGINA ESTILO NOTION ---
-st.set_page_config(page_title="Traductor Shiny", page_icon="📝", layout="centered")
 
-# CSS para inyectar el estilo Notion
-st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-    
-    html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
-        color: #37352f;
-    }
-
-    /* Estilo para los bloques de información */
-    .stAlert {
-        border-radius: 10px;
-        border: 1px solid #edeef0;
-        background-color: #f7f6f3;
-    }
-
-    /* Botón de Streamlit personalizado */
-    .stButton>button {
-        border-radius: 6px;
-        border: 1px solid #e0e0e0;
-        background-color: white;
-        transition: all 0.2s ease;
-    }
-    
-    .stButton>button:hover {
-        background-color: #f4f4f4;
-        border-color: #37352f;
-    }
-
-    /* Ajuste de títulos */
-    h1, h2, h3 {
-        color: #37352f;
-        font-weight: 700;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-# --- CABECERA ---
 st.write("# 🎙️ Traductor Shiny")
-st.caption("Herramienta de traducción por voz con estética minimalista.")
 
 # --- SECCIÓN: CÓMO USAR (CON IMAGEN INTERNA) ---
 with st.expander("📖 Guía de uso rápido", expanded=True):
@@ -75,8 +33,8 @@ with st.expander("📖 Guía de uso rápido", expanded=True):
 st.write("---")
 
 # --- ÁREA DE CAPTURA DE VOZ ---
-st.markdown("### 🎤 Dictado")
-st.write("Toca el botón y habla (Recuerda: No compatible con iOS/iPhone).")
+st.markdown("### Presiona el boton y habla")
+
 
 # Botones Bokeh
 stt_button = Button(label="Escuchar 🎤", width=150, height=45, button_type="primary")
