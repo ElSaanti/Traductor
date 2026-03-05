@@ -57,7 +57,6 @@ stt_button.js_on_event("button_click", CustomJS(code="""
     
     recognition.start();
 """))
-)
 
 stop_btn = Button(label="⏹️ Detener", width=300, height=44)
 stop_btn.js_on_event(
