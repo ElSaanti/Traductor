@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from bokeh.models import CustomJS, Button
-from bokeh.layouts import column  # Importante para mostrar ambos botones
+from bokeh.layouts import row  # Cambiamos column por row
 from streamlit_bokeh_events import streamlit_bokeh_events
 from PIL import Image
 import time
@@ -15,12 +15,12 @@ st.set_page_config(page_title="TRADUCTOR Shiny", layout="centered")
 st.title("TRADUCTOR Shiny.")
 st.subheader("Escucho lo que quieres traducir.")
 
-# Imagen (Asegúrate de tener el archivo o comenta esta línea)
+# Imagen
 try:
     image = Image.open('traductor.jpg')
     st.image(image, width=300)
 except:
-    st.info("💡 Coloca una imagen llamada 'traductor.jpg' en la carpeta para verla aquí.")
+    pass
 
 with st.sidebar:
     st.subheader("Traductor.")
@@ -30,8 +30,8 @@ st.write("Toca el botón y habla lo que te gustaría traducir (excepto si tienes
 
 # --- CONFIGURACIÓN DE BOTONES BOKEH ---
 
-# Botón Iniciar
-stt_button = Button(label="Escuchar 🎤", width=300, height=50, button_type="success")
+# Botón Iniciar (Mantenemos el verde para contraste, o puedes quitar button_type)
+stt_button = Button(label="Escuchar 🎤", width=150, height=50, button_type="success")
 stt_button.js_on_event("button_click", CustomJS(code="""
     window._rec = new webkitSpeechRecognition();
     window._rec.continuous = false;
@@ -52,8 +52,8 @@ stt_button.js_on_event("button_click", CustomJS(code="""
     window._rec.start();
 """))
 
-# Botón Detener
-stop_btn = Button(label="⏹️ Detener", width=300, height=50, button_type="danger")
+# Botón Detener (Sin button_type para que sea gris/neutro)
+stop_btn = Button(label="⏹️ Detener", width=150, height=50) 
 stop_btn.js_on_event("button_click", CustomJS(code="""
     try {
         if (window._rec) { 
@@ -65,16 +65,16 @@ stop_btn.js_on_event("button_click", CustomJS(code="""
     }
 """))
 
-# Agrupamos los botones en un diseño de columna
-layout = column(stt_button, stop_btn)
+# Agrupamos los botones en una FILA (uno al lado del otro)
+layout = row(stt_button, stop_btn)
 
-# Renderizamos los eventos de Bokeh
+# Renderizamos los eventos
 result = streamlit_bokeh_events(
     layout,
     events="GET_TEXT",
     key="listen",
     refresh_on_update=False,
-    override_height=150, # Altura ajustada para dos botones
+    override_height=70, # Altura reducida ya que es una sola fila
     debounce_time=0
 )
 
@@ -94,8 +94,9 @@ if result and "GET_TEXT" in result:
         
         col1, col2 = st.columns(2)
         
+        langs = {"Inglés": "en", "Español": "es", "Bengali": "bn", "Coreano": "ko", "Mandarín": "zh-cn", "Japonés": "ja"}
+        
         with col1:
-            langs = {"Inglés": "en", "Español": "es", "Bengali": "bn", "Coreano": "ko", "Mandarín": "zh-cn", "Japonés": "ja"}
             in_lang_name = st.selectbox("Idioma Entrada", list(langs.keys()), index=1)
             input_language = langs[in_lang_name]
 
@@ -117,7 +118,6 @@ if result and "GET_TEXT" in result:
             translation = translator.translate(text, src=input_language, dest=output_language)
             trans_text = translation.text
             
-            # Generar Audio
             tts = gTTS(trans_text, lang=output_language, tld=tld, slow=False)
             my_file_name = "audio_result"
             tts.save(f"temp/{my_file_name}.mp3")
@@ -129,7 +129,7 @@ if result and "GET_TEXT" in result:
             if display_output_text:
                 st.success(f"Traducción: {trans_text}")
 
-# Limpieza de archivos viejos
+# Limpieza
 def remove_files(n):
     mp3_files = glob.glob("temp/*mp3")
     now = time.time()
